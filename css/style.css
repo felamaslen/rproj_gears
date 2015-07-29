@@ -1,0 +1,70 @@
+/**
+  * gears.css
+  * Written by Fela Maslen 2013
+  */
+  
+body {
+  font: .9em 'Open Sans', Aial, Helvetica, sans-serif;
+}
+input[type=number] {
+  width: 48px;
+}
+
+#wrapper {
+  width: 900px;
+  margin: 0 auto;
+}
+
+#input {
+  width: 100%;
+  border: 1px solid #000;
+  text-align: center;
+}
+#input tbody {
+}
+#input td {
+  border: 1px solid #000;
+}
+
+#chainring_meta {
+  float: left;
+}
+
+td.text {
+  font-weight: bold;
+}
+
+#ot {
+  margin: 24px 0;
+}
+#ot table {
+  border: 1px solid #000;
+  border-bottom: 0;
+  border-right: 0;
+  background: #e8e4d7;
+  border-spacing: 0;
+}
+#ot td,
+#ot th {
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+#ot .y {
+  background: #eee;
+  color: #900;
+  font-weight: bold;
+}
+#ot .n {
+  background: #fff;
+  font-weight: bold;
+}
+#ot .tl {
+  font-size: smaller;
+}
+#ot .e {
+}
+
+#colorwheel {
+  width: 100px;
+  height: 100px;
+}
