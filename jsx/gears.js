@@ -28,7 +28,6 @@ function frontProps(value) {
 
   this.type = "InputNumber";
   this.props = {
-    key: uqid(),
     name: "front[]",
     id: "front" + numFrontProps.toString(),
     min: 1,
@@ -45,7 +44,6 @@ function rearProps(value) {
 
   this.type = "InputNumber";
   this.props = {
-    key: uqid(),
     name: "rear[]",
     id: "rear" + numRearProps.toString(),
     min: 1,
@@ -63,7 +61,6 @@ var inputs = [
   {
     type: "SelectList",
     props: {
-      key: uqid(),
       name: "diameter",
       id: "diameter",
       data: [
@@ -121,7 +118,6 @@ var inputs = [
   {
     type: "SelectList",
     props: {
-      key: uqid(),
       name: "crankdiam",
       id: "crankdiam",
       data: [
@@ -151,7 +147,6 @@ var inputs = [
     {
       type: "SelectList",
       props: {
-        key: uqid(),
         name: "modeval",
         id: "modeval",
         data: [
@@ -166,7 +161,6 @@ var inputs = [
     {
       type: "InputNumber",
       props: {
-        key: uqid(),
         name: "rpm",
         id: "rpm",
         min: 10,
@@ -177,7 +171,6 @@ var inputs = [
     {
       type: "Span",
       props: {
-        key: uqid(),
         text: "RPM",
       },
     },
@@ -197,7 +190,6 @@ var inputs = [
   {
     type: "SelectList",
     props: {
-      key: uqid(),
       name: "cassette",
       id: "cassette",
       data: [
@@ -288,7 +280,6 @@ var inputs = [
   {
     type: "SelectList",
     props: {
-      key: uqid(),
       name: "hubmodel",
       id: "hubmodel",
       data: [
@@ -417,7 +408,6 @@ var inputs = [
   {
     type: "Span",
     props: {
-      key: uqid(),
       text: "Not done yet...",
     },
   },
@@ -445,7 +435,7 @@ var TblOut = React.createClass({
             T = this.props.num_hubg > 1 ? g : "";
             g++;
 
-            return <th>{T}</th>;
+            return <th key={uqid()}>{T}</th>;
           }.bind(this))
         }
       </tr>
@@ -479,7 +469,7 @@ var TblOut = React.createClass({
             a -= 12;
 
           return (
-            <td style={style}>{hubgr.ratio[front][rear]}</td>
+            <td key={index} style={style}>{hubgr.ratio[front][rear]}</td>
           );
         }.bind(this));
         
@@ -491,7 +481,7 @@ var TblOut = React.createClass({
         }
 
         return (
-          <tr>
+          <tr key={j}>
             {FirstCell}
             {OtherCells}
           </tr>
@@ -501,7 +491,7 @@ var TblOut = React.createClass({
       aPos++;
 
       return (
-        <tbody>
+        <tbody key={i}>
           {FirstRow}
           {OtherRows}
         </tbody>
@@ -528,15 +518,15 @@ var MainForm = React.createClass({
   SelectList: function(self, props) {
     var optionNodes = props.data.map(function(item, index) {
       return (
-        <option value={item.val}>
+        <option value={index} key={uqid()}>
           {item.text}
         </option>
       );
     });
-
+    
     return (
       <select name={props.name} id={props.id} ref={props.id} onChange={self.calculate}
-        value={[self.state.data.values[props.id]]}>
+        value={self.state.data.values[props.id]} key={uqid()}>
         {optionNodes}
       </select>
     );
@@ -544,35 +534,36 @@ var MainForm = React.createClass({
 
   InputNumber: function(self, props) {
     return (
-      <input type="number" id={props.id} ref={props.id} name={props.name}
+      <input type="number" id={props.id} ref={props.id} key={uqid()}
+        name={props.name} value={self.state.data.values[props.id]}
         min={props.min} max={props.max} step={props.step}
-        value={self.state.data.values[props.id]} onChange={self.calculate} />
+        onChange={self.calculate} />
     );
   },
 
   Span: function(self, props) {
     return (
-      <span id={props.id}>{props.text}</span>
+      <span id={props.id} key={uqid()}>{props.text}</span>
     );
   },
   
   DivOut: function(self, props) {
     return (
-      <div id={props.id} ref={props.id}></div>
+      <div id={props.id} ref={props.id} key={uqid()}></div>
     );
   },
 
   getValues: function() {
     // gets current form values and returns them
     var values = {
-      diameter:   parseFloat(React.findDOMNode(this.refs.diameter).value),
-      crankdiam:  parseFloat(React.findDOMNode(this.refs.crankdiam).value),
+      diameter:   parseInt(React.findDOMNode(this.refs.diameter).value),
+      crankdiam:  parseInt(React.findDOMNode(this.refs.crankdiam).value),
       modeval:    parseInt(React.findDOMNode(this.refs.modeval).value),
       rpm:        parseInt(React.findDOMNode(this.refs.rpm).value),
       front1:     parseInt(React.findDOMNode(this.refs.front1).value),
       front2:     parseInt(React.findDOMNode(this.refs.front2).value),
       front3:     parseInt(React.findDOMNode(this.refs.front3).value),
-      cassette:   React.findDOMNode(this.refs.cassette).value.split("-"),
+      cassette:   parseInt(React.findDOMNode(this.refs.cassette).value),
       rear1:      parseInt(React.findDOMNode(this.refs.rear1).value),
       rear2:      parseInt(React.findDOMNode(this.refs.rear2).value),
       rear3:      parseInt(React.findDOMNode(this.refs.rear3).value),
@@ -583,7 +574,7 @@ var MainForm = React.createClass({
       rear8:      parseInt(React.findDOMNode(this.refs.rear8).value),
       rear9:      parseInt(React.findDOMNode(this.refs.rear9).value),
       rear10:     parseInt(React.findDOMNode(this.refs.rear10).value),
-      hubmodel:   React.findDOMNode(this.refs.hubmodel).value,
+      hubmodel:   parseInt(React.findDOMNode(this.refs.hubmodel).value),
     };
 
     for (var key in values) {
@@ -600,26 +591,38 @@ var MainForm = React.createClass({
     
     this.setState({ data: { values: values, output: null } });
 
+    var cvals = {};
+    
+    for (var key in values) {
+      cvals[key] = values[key];
+    }
+
+    cvals.diameter  = parseFloat(inputs[0].inputs[0].props.data[values.diameter].val),
+    cvals.crankdiam = parseFloat(inputs[1].inputs[0].props.data[values.crankdiam].val),
+    cvals.modeval   = parseInt(inputs[2].inputs[0].props.data[values.modeval].val),
+    cvals.cassette  = inputs[4].inputs[0].props.data[values.cassette].val,
+    cvals.hubmodel  = inputs[6].inputs[0].props.data[values.hubmodel].val;
+
     var front = [], k = 1;
-    while (typeof values["front" + k.toString()] !== "undefined" &&
-        !isNaN(values["front" + k.toString()])) {
+    while (typeof cvals["front" + k.toString()] !== "undefined" &&
+        !isNaN(cvals["front" + k.toString()])) {
       
-      front.push(values["front" + k.toString()]);
+      front.push(cvals["front" + k.toString()]);
       k++;
     }
    
     var rear;
-    if (values.cassette[0] == "Custom") {
+    if (cvals.cassette == "Custom") {
       var rear = [], l = 1;
-      while (typeof values["rear" + l.toString()] !== "undefined" &&
-          !isNaN(values["rear" + l.toString()])) {
+      while (typeof cvals["rear" + l.toString()] !== "undefined" &&
+          !isNaN(cvals["rear" + l.toString()])) {
         
-        rear.push(values["rear" + l.toString()]);
+        rear.push(cvals["rear" + l.toString()]);
         l++;
       }
     }
     else {
-      rear = values.cassette[0];
+      rear = cassette.split("-");
     }
     
     front.sort(function(a,b){ return a-b; });
@@ -627,7 +630,7 @@ var MainForm = React.createClass({
 
     var gr = [], unit;
 
-    switch (values.modeval) {
+    switch (cvals.modeval) {
       case 0:
         unit = "Gain ratios";
         break;
@@ -638,22 +641,22 @@ var MainForm = React.createClass({
         unit = "Meters development";
         break;
       case 3:
-        unit = "km/h @ " + values.rpm.toString() + " rpm";
+        unit = "km/h @ " + cvals.rpm.toString() + " rpm";
         break;
       case 4:
-        unit = "mph @ " + values.rpm.toString() + " rpm";
+        unit = "mph @ " + cvals.rpm.toString() + " rpm";
         break;
       default:
         unit = "Arbitrary units";
     }
 
-    var hub_gears = values.hubmodel.split("-");
+    var hub_gears = cvals.hubmodel.split("-");
 
     for (var k = 0; k < hub_gears.length; k++) {
       var hub_gear = hub_gears[k], hg = parseFloat(hub_gear);
       if (hg === 0 || isNaN(hg)) continue;
 
-      gr.unshift({gear: hub_gear, ratio: {}});
+      gr.unshift({gear: hg, ratio: {}});
 
       for (var i = 0; i < front.length; i++) {
         var fteeth = parseInt(front[i]);
@@ -665,7 +668,7 @@ var MainForm = React.createClass({
           var rteeth = parseInt(rear[j]);
           if (rteeth === 0 || isNaN(rteeth)) continue;
 
-          gr[0].ratio[fteeth][rteeth] = Math.round(10 * calc_val(hg * fteeth / rteeth, values)) / 10;
+          gr[0].ratio[fteeth][rteeth] = Math.round(10 * calc_val(hg * fteeth / rteeth, cvals)) / 10;
         }
       }
     }
@@ -718,14 +721,14 @@ var MainForm = React.createClass({
     return {
       data: {
         values: {
-          diameter: .690118,
-          crankdiam: .17,
+          diameter: 8,
+          crankdiam: 8,
           modeval: 3,
           rpm: 85,
           front1: 33,
           front2: 45,
           front3: 56,
-          cassette: "Custom",
+          cassette: 0,
           rear1: 8,
           rear2: 10,
           rear3: 13,
@@ -735,7 +738,7 @@ var MainForm = React.createClass({
           rear7: 27,
           rear8: 30,
           rear9: 35,
-          hubmodel: "1.615-1.419-1.223-1-0.851-0.748-0.644-0.527",
+          hubmodel: 27,
         },
         output: null
       }
